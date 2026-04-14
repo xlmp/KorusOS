@@ -1,4 +1,4 @@
-# 🚀 Korus OK - Operating System Project
+# 🚀 Korus OS - Operating System Project
 
 <p align="center">
   <b>Experimental • Modular • Low-Level • Educational</b>
@@ -14,7 +14,7 @@
 
 # 📖 About
 
-**Korus OK** is an experimental operating system designed for learning, research, and low-level system development.
+**Korus OS** is an experimental operating system designed for learning, research, and low-level system development.
 
 The project focuses on building a minimal yet structured OS from scratch using modern tooling and a clean architecture approach.
 
