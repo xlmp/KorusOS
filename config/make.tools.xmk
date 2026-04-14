@@ -1,0 +1,84 @@
+BOCHS_EXE = bochs.exe
+
+DEBUG_POIN= -gdwarf-4 
+# DEBUG_POIN=
+
+
+
+COMPILE = LLVM
+ENVIRONMENT = WINDOWS
+language = pt_br
+arch = x32
+
+#
+INCLUDEDIR = core/_include
+#
+KERNEL_VERSION = v0.1.2604
+Filekernel = korus-$(KERNEL_VERSION).xn
+FilekernelImg = korus-$(KERNEL_VERSION).img
+FilekernelPath = .obj/$(Filekernel)
+ISO_FILE = .obj/korus-$(arch)-$(KERNEL_VERSION).iso
+IMG_FILE = .obj/korus-$(arch)-$(KERNEL_VERSION).img
+
+ISO_FILE_WIN = .iso.dev\korus-$(arch)-$(KERNEL_VERSION).iso
+
+#
+LINKER-FILE-LD = .config/core.ld
+LINKER-SERVICES-FILE-LD = .config/core.service.ld
+
+
+CC = clang 
+CCNAME = Usando Compilador LLVM
+
+#compiland codigo .cpp
+CCPARAMS = $(DEBUG_POIN) -m32 -I$(INCLUDEDIR) -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -Wno-write-strings $
+	-fpermissive $
+	-march=i386 --target=i386-pc-none-elf -ffreestanding $
+	-fasm-blocks -std=c++14 $
+	-Wc++11-narrowing $
+	-Werror=return-type
+# 	-Wparentheses-equality $
+	-Wlogical-not-parentheses $
+
+
+# -Wparentheses-equality $
+	-Wlogical-not-parentheses $
+	-Werror=return-type
+# 	-std=c++14 
+
+#compiland codigo .c
+C_PARAMS = $(DEBUG_POIN) -m32 -I$(INCLUDEDIR) -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -Wno-write-strings $
+	-fpermissive $
+	-march=i386 --target=i386-pc-none-elf -ffreestanding $
+	-fasm-blocks $
+	-Wc++11-narrowing $
+	-Werror=return-type
+	-Wlogical-not-parentheses $
+	-O1 $
+	-Wlogical-not-parentheses $
+	-Werror=return-type
+
+AS = clang 
+ASPARAMS = -m32 -I$(INCLUDEDIR)  -march=i386 --target=i386-pc-none-elf -ffreestanding
+
+
+AR= llvm-ar
+LD= ld.lld
+# i686-elf-ld 
+LDPARAMS = -nostdlib -melf_i386
+LINKER_FILE_LD = core/link.ld
+
+#ifeq ($(ENVIRONMENT),WINDOWS)
+	cp = copy 
+	OSMSG = Compilando em Ambiente WINDOWS
+	GRUB_MKIMAGEM = grub-mkimage.exe
+	# grub-mkimage.exe
+	MK_ISOFS = mkisofs
+	MK_ISOFS_FLAGS =  -no-emul-boot -boot-load-size 12 -boot-info-table
+	# -R # Warning: -rock has same effect as -rational-rock on this platform.
+
+#else
+#	cp = cp
+#	OSMSG = Compilando em Ambiente Não WINDOWS
+
+#endif

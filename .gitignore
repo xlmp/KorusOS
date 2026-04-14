@@ -1,5 +1,9 @@
 # Prerequisites
 *.d
+setup.ps1
+_root/*
+*_root
+xmake.cache.*
 
 # Compiled Object files
 *.slo

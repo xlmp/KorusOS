@@ -1,0 +1,44 @@
+
+rule all
+    message Compilando
+    call comp_objs
+    call linker
+    call creatiso
+    call qemu
+
+rule comp_objs
+    read $(core-objets)
+
+rule linker
+    $(LD) $(LDPARAMS) -T $(LINKER_FILE_LD) -o $(FilekernelPath)  $(core-objets)
+    message [-] $(Filekernel) :: Compilado :: !
+
+rule .obj/%.o <= %.c
+    message [-] %1 Comp CPP..
+    mkdir %1
+    $(CC) $(C_PARAMS) -c -o %1 %2
+
+rule .obj/%.o <= %.asm
+    message [-] %1 Comp CPP..
+    mkdir %1
+    nasm -g -I$(INCLUDEDIR) -felf32 %2 -o %1
+
+rule creatiso
+    message [1/2] Criando Arquivo KORUS.ISO com o GRUB
+	cp $(FilekernelPath) _root/
+	$(GRUB_MKIMAGEM) --prefix=./_root $
+	--config=_root/boot/grub/grub.cfg $
+	--output=_root/boot/grub/core.img $
+	-O i386-pc-eltorito biosdisk iso9660 multiboot $
+	-d ../../Tools/grub/i386-pc
+
+	$(MK_ISOFS) -quiet -r -b boot/grub/core.img $(MK_ISOFS_FLAGS) -o $(ISO_FILE) ./_root
+	message [2/2] $(ISO_FILE) Criado com Sucesso!
+
+rule qemu
+   message "Running QEMU with Korus OS"
+   message $(ISO_FILE)
+   qemu -M "pc" -m 512 -cpu "qemu32" -vga cirrus -serial vc $
+   -drive "file=$(ISO_FILE),index=1,media=cdrom" $
+   -boot order=dc,menu=off -soundhw es1370 -enable-kqemu -net nic,vlan=0,macaddr=52-54-00-E1-B0-29,model=rtl8139 $
+   -net user,vlan=0,hostfwd=tcp::2222-:22

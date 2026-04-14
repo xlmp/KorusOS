@@ -1,0 +1,16 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# xmakefile.xmk — Makefile para o Projeto Elision OS
+# Este arquivo define as regras de build para compilar o kernel, criar a imagem ISO
+# de boot e executar o sistema em uma máquina virtual usando QEMU.
+# Ele inclui configurações específicas para o ambiente de desenvolvimento, como o uso do GRUB para criar a imagem ISO e as opções de QEMU para testar o sistema.
+# As regras são organizadas para facilitar o processo de build, desde a compilação dos objetos até a criação da imagem ISO e a execução do sistema.
+# O arquivo é modular, incluindo outras configurações e regras de build a partir de arquivos separados, como config/iso.xmk e config/vmteste.xmk.
+# Autor: Sionp
+# Data: 2024-06
+# Make Buider: xmake
+# ─────────────────────────────────────────────────────────────────────────────
+
+include config/make.tools
+include config/make.objects
+include config/make.rules
+

@@ -1,0 +1,15 @@
+core-objets = .obj/core/boot/boot.o $
+        .obj/core/drivers/keyboard.o $
+        .obj/core/drivers/pci.o $
+        .obj/core/drivers/screen.o $
+        .obj/core/kernel/devices.o $
+        .obj/core/kernel/disk.o $
+        .obj/core/kernel/kernel.o $
+        .obj/core/kernel/memory.o $
+        .obj/core/kernel/process.o $
+        .obj/core/kernel/syscall.o $
+        .obj/core/loader/elf_loader.o $
+        .obj/core/net/tcpip.o $
+        .obj/core/shell/shell.o $
+        .obj/core/kernel/scheduler.o $
+        .obj/core/fs/vfs.o
