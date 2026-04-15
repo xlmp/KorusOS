@@ -13,3 +13,4 @@ core-objets = .obj/core/boot/boot.o $
         .obj/core/shell/shell.o $
         .obj/core/kernel/scheduler.o $
         .obj/core/fs/vfs.o
+                

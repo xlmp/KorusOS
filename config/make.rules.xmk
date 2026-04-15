@@ -13,10 +13,10 @@ rule linker
     $(LD) $(LDPARAMS) -T $(LINKER_FILE_LD) -o $(FilekernelPath)  $(core-objets)
     message [-] $(Filekernel) :: Compilado :: !
 
-rule .obj/%.o <= %.c
+rule .obj/%.o <= %.cpp
     message [-] %1 Comp CPP..
     mkdir %1
-    $(CC) $(C_PARAMS) -c -o %1 %2
+    $(CC) $(CCPARAMS) -c -o %1 %2
 
 rule .obj/%.o <= %.asm
     message [-] %1 Comp CPP..

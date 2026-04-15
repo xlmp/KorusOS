@@ -36,7 +36,8 @@ CCPARAMS = $(DEBUG_POIN) -m32 -I$(INCLUDEDIR) -fno-use-cxa-atexit -nostdlib -fno
 	-march=i386 --target=i386-pc-none-elf -ffreestanding $
 	-fasm-blocks -std=c++14 $
 	-Wc++11-narrowing $
-	-Werror=return-type
+	-Werror=return-type $
+	-Wmacro-redefined $
 # 	-Wparentheses-equality $
 	-Wlogical-not-parentheses $
 
