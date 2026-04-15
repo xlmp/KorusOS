@@ -19,9 +19,9 @@ rule .obj/%.o <= %.cpp
     $(CC) $(CCPARAMS) -c -o %1 %2
 
 rule .obj/%.o <= %.asm
-    message [-] %1 Comp CPP..
+    message [-] %1 Comp ASM..
     mkdir %1
-    nasm -g -I$(INCLUDEDIR) -felf32 %2 -o %1
+    nasm -I$(INCLUDEDIR) -g -f elf64 %2 -o %1
 
 rule creatiso
     message [1/2] Criando Arquivo KORUS.ISO com o GRUB
@@ -38,7 +38,7 @@ rule creatiso
 rule qemu
    message "Running QEMU with Korus OS"
    message $(ISO_FILE)
-   qemu -M "pc" -m 512 -cpu "qemu32" -vga cirrus -serial vc $
+   qemu -M "pc" -m 512 -cpu "qemu64" -vga cirrus -serial vc $
    -drive "file=$(ISO_FILE),index=1,media=cdrom" $
    -boot order=dc,menu=off -soundhw es1370 -enable-kqemu -net nic,vlan=0,macaddr=52-54-00-E1-B0-29,model=rtl8139 $
    -net user,vlan=0,hostfwd=tcp::2222-:22

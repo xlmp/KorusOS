@@ -13,7 +13,7 @@
 extern void screen_print(const char *str);
 extern void screen_println(const char *str);
 extern void screen_print_int(s32 val);
-extern void screen_print_hex(u32 val);
+extern void screen_print_hex(uptr val);
 
 /* ============================================================
  * VARIÁVEIS INTERNAS
@@ -83,7 +83,7 @@ void init_processes(void) {
  *            Aloca espaço de endereçamento próprio e configura as estruturas.
  *            Retorna o PID ou -1 em caso de erro.
  */
-int create_process(const char *name, u32 entry_point, privilege_t privilege) {
+int create_process(const char *name, uptr entry_point, privilege_t privilege) {
     if (proc_count >= MAX_PROCESSES) return -1;
 
     int slot = find_free_proc_slot();
@@ -106,7 +106,8 @@ int create_process(const char *name, u32 entry_point, privilege_t privilege) {
     if (privilege == PRIVILEGE_USER) {
         u8 *stack_mem = (u8 *)kmalloc(USER_STACK_SIZE);
         if (!stack_mem) return -1;
-        proc->user_stack = (u32)stack_mem + USER_STACK_SIZE;
+        //TODO: FOI COMENTADO PARA UM TESTE
+        //proc->user_stack = (u32)(stack_mem + USER_STACK_SIZE);
     }
 
     /* Cria thread principal do processo */
@@ -184,11 +185,11 @@ process_t *get_process_by_pid(u32 pid) {
  *   user_esp - Endereço do topo da pilha em modo usuário
  *   user_eip - Endereço de início da execução em modo usuário
  */
-void switch_to_user_mode(u32 user_esp, u32 user_eip) {
+void switch_to_user_mode(uptr user_rsp, uptr user_rip) {
     /*
-     * Para a transição para user mode (ring 3), usamos IRET.
-     * O IRET espera na pilha (em ordem de popping):
-     *   EIP, CS, EFLAGS, ESP, SS
+     * Para a transição para user mode (ring 3), usamos IRETQ.
+     * O IRETQ espera na pilha (em ordem de popping):
+     *   RIP, CS, RFLAGS, RSP, SS
      *
      * Segmentos User Mode:
      *   CS = 0x1B (user code segment, RPL=3)
@@ -205,38 +206,19 @@ void switch_to_user_mode(u32 user_esp, u32 user_eip) {
         "mov %%ax, %%fs\n"
         "mov %%ax, %%gs\n"
         "push $0x23\n"                  /* SS */
-        "push %0\n"                     /* ESP de user mode */
-        "pushfl\n"                      /* EFLAGS */
-        "orl $0x200, (%%esp)\n"         /* Habilita IF no EFLAGS */
+        "push %0\n"                     /* RSP de user mode */
+        "pushfq\n"                      /* RFLAGS */
+        "orq $0x200, (%%rsp)\n"         /* Habilita IF no RFLAGS */
         "push $0x1B\n"                  /* CS de user mode (ring 3) */
-        "push %1\n"                     /* EIP de user mode */
-        "iret\n"                        /* Retorna para user mode */
+        "push %1\n"                     /* RIP de user mode */
+        "iretq\n"                       /* Retorna para user mode */
         :
-        : "r"(user_esp), "r"(user_eip)
-        : "eax", "memory"
+        : "r"(user_rsp), "r"(user_rip)
+        : "rax", "memory"
     );
 }
 
 
-//PARA x64
-// void switch_to_user_mode(u64 user_rsp, u64 user_rip) {
-//     __asm__ volatile (
-//         "cli\n"
-//         "mov $0x23, %%ax\n"
-//         "mov %%ax, %%ds\n"
-//         "mov %%ax, %%es\n"
-//         "push $0x23\n"         // SS
-//         "push %0\n"            // RSP
-//         "pushfq\n"             // RFLAGS (64 bits)
-//         "orq $0x200, (%%rsp)\n"// Habilita IF
-//         "push $0x1B\n"         // CS (user mode ring 3)
-//         "push %1\n"            // RIP
-//         "iretq\n"              // iretq em vez de iret!
-//         :
-//         : "r"(user_rsp), "r"(user_rip)
-//         : "rax", "memory"
-//     );
-// }
 
 /*
  * Função: list_processes

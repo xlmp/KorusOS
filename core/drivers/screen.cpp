@@ -188,14 +188,14 @@ void screen_println(const char *str) {
  * Descrição: Exibe um número inteiro sem sinal em formato hexadecimal
  *            prefixado com "0x" no terminal.
  */
-void screen_print_hex(u32 val) {
+void screen_print_hex(uptr val) {
     const char hex_chars[] = "0123456789ABCDEF";
-    char buf[11];
+    char buf[19];
     buf[0]  = '0';
     buf[1]  = 'x';
-    buf[10] = '\0';
+    buf[18] = '\0';
 
-    for (int i = 9; i >= 2; i--) {
+    for (int i = 17; i >= 2; i--) {
         buf[i] = hex_chars[val & 0xF];
         val >>= 4;
     }

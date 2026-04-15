@@ -15,7 +15,7 @@
 extern void screen_print(const char *str);
 extern void screen_println(const char *str);
 extern void screen_print_int(s32 val);
-extern void screen_print_hex(u32 val);
+extern void screen_print_hex(uptr val);
 
 /* ============================================================
  * VARIÁVEIS INTERNAS
@@ -23,7 +23,7 @@ extern void screen_print_hex(u32 val);
 
 /* Bitmap de frames físicos (1 bit por página de 4KB) */
 #define MAX_FRAMES      (256 * 1024)    /* Suporte até 1 GB de RAM */
-static u32 frame_bitmap[MAX_FRAMES / 32]; /* 1 bit = 1 frame */
+static u64 frame_bitmap[MAX_FRAMES / 64]; /* 1 bit = 1 frame */
 
 static u32 total_frames  = 0;   /* Total de frames físicos */
 static u32 used_frames   = 0;   /* Frames atualmente em uso */
@@ -37,14 +37,14 @@ static page_directory_t kernel_page_dir __attribute__((aligned(4096)));
  * ============================================================ */
 typedef struct heap_block {
     u32              magic;     /* Valor mágico para detecção de corrupção */
-    u32              size;      /* Tamanho do bloco de dados */
+    uptr             size;      /* Tamanho do bloco de dados */
     bool             free;      /* Bloco está livre? */
     struct heap_block *next;    /* Próximo bloco na lista */
 } heap_block_t;
 
 #define HEAP_MAGIC      0xCAFEBABE
 static u8  *heap_base_ptr = (u8 *)NULL;
-static u32  heap_current  = 0;
+static uptr  heap_current  = 0;
 static heap_block_t *heap_head = (heap_block_t *)NULL;
 
 /* ============================================================
@@ -57,7 +57,7 @@ static heap_block_t *heap_head = (heap_block_t *)NULL;
  */
 static void frame_set(u32 frame_addr) {
     u32 frame = frame_addr / PAGE_SIZE;
-    frame_bitmap[frame / 32] |= (1 << (frame % 32));
+    frame_bitmap[frame / 64] |= (1ULL << (frame % 64));
 }
 
 /*
@@ -66,7 +66,7 @@ static void frame_set(u32 frame_addr) {
  */
 static void frame_clear(u32 frame_addr) {
     u32 frame = frame_addr / PAGE_SIZE;
-    frame_bitmap[frame / 32] &= ~(1 << (frame % 32));
+    frame_bitmap[frame / 64] &= ~(1ULL << (frame % 64));
 }
 
 /*
@@ -75,7 +75,7 @@ static void frame_clear(u32 frame_addr) {
  */
 static int frame_test(u32 frame_addr) {
     u32 frame = frame_addr / PAGE_SIZE;
-    return (frame_bitmap[frame / 32] >> (frame % 32)) & 1;
+    return (frame_bitmap[frame / 64] >> (frame % 64)) & 1;
 }
 
 /*
@@ -84,11 +84,11 @@ static int frame_test(u32 frame_addr) {
  *            disponível no bitmap. Retorna 0 se não houver frames livres.
  */
 static u32 frame_find_free(void) {
-    for (u32 i = 0; i < total_frames / 32; i++) {
-        if (frame_bitmap[i] != 0xFFFFFFFF) {
-            for (u32 j = 0; j < 32; j++) {
-                if (!(frame_bitmap[i] & (1 << j))) {
-                    return (i * 32 + j) * PAGE_SIZE;
+    for (u32 i = 0; i < total_frames / 64; i++) {
+        if (frame_bitmap[i] != 0xFFFFFFFFFFFFFFFFULL) {
+            for (u32 j = 0; j < 64; j++) {
+                if (!(frame_bitmap[i] & (1ULL << j))) {
+                    return (i * 64 + j) * PAGE_SIZE;
                 }
             }
         }

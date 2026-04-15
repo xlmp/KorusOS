@@ -30,7 +30,7 @@ static syscall_handler_t syscall_table[SYSCALL_COUNT];
  * Descrição: Termina o processo atual com o código de saída fornecido.
  *            Libera todos os recursos associados ao processo.
  */
-u32 sys_exit(u32 exit_code, u32 a2, u32 a3, u32 a4, u32 a5) {
+uptr sys_exit(uptr exit_code, uptr a2, uptr a3, uptr a4, uptr a5) {
     UNUSED(a2); UNUSED(a3); UNUSED(a4); UNUSED(a5);
 
     process_t *proc = get_current_process();
@@ -45,11 +45,11 @@ u32 sys_exit(u32 exit_code, u32 a2, u32 a3, u32 a4, u32 a5) {
  * Descrição: Lê até 'size' bytes do descritor de arquivo 'fd'
  *            para o buffer em 'buf_ptr'. Retorna bytes lidos.
  */
-u32 sys_read(u32 fd, u32 buf_ptr, u32 size, u32 a4, u32 a5) {
+uptr sys_read(uptr fd, uptr buf_ptr, uptr size, uptr a4, uptr a5) {
     UNUSED(a4); UNUSED(a5);
 
     void *buffer = (void *)buf_ptr;
-    if (!buffer) return (u32)-1;
+    if (!buffer) return (uptr)-1;
 
     /* fd=0 é stdin - leitura do teclado (simplificado) */
     if (fd == 0) {
@@ -63,7 +63,7 @@ u32 sys_read(u32 fd, u32 buf_ptr, u32 size, u32 a4, u32 a5) {
     }
 
     int result = vfs_read((int)fd, buffer, size);
-    return (result < 0) ? (u32)-1 : (u32)result;
+    return (result < 0) ? (uptr)-1 : (uptr)result;
 }
 
 /*
@@ -71,11 +71,11 @@ u32 sys_read(u32 fd, u32 buf_ptr, u32 size, u32 a4, u32 a5) {
  * Descrição: Escreve 'size' bytes do buffer 'buf_ptr' no descritor
  *            de arquivo 'fd'. fd=1 é stdout, fd=2 é stderr.
  */
-u32 sys_write(u32 fd, u32 buf_ptr, u32 size, u32 a4, u32 a5) {
+uptr sys_write(uptr fd, uptr buf_ptr, uptr size, uptr a4, uptr a5) {
     UNUSED(a4); UNUSED(a5);
 
     const char *buffer = (const char *)buf_ptr;
-    if (!buffer) return (u32)-1;
+    if (!buffer) return (uptr)-1;
 
     /* fd=1 (stdout) ou fd=2 (stderr): escreve na tela */
     if (fd == 1 || fd == 2) {
@@ -86,7 +86,7 @@ u32 sys_write(u32 fd, u32 buf_ptr, u32 size, u32 a4, u32 a5) {
     }
 
     int result = vfs_write((int)fd, buffer, size);
-    return (result < 0) ? (u32)-1 : (u32)result;
+    return (result < 0) ? (uptr)-1 : (uptr)result;
 }
 
 /*
@@ -94,14 +94,14 @@ u32 sys_write(u32 fd, u32 buf_ptr, u32 size, u32 a4, u32 a5) {
  * Descrição: Abre o arquivo no caminho 'path_ptr' com as flags
  *            especificadas. Retorna o fd ou -1 em erro.
  */
-u32 sys_open(u32 path_ptr, u32 flags, u32 a3, u32 a4, u32 a5) {
+uptr sys_open(uptr path_ptr, uptr flags, uptr a3, uptr a4, uptr a5) {
     UNUSED(a3); UNUSED(a4); UNUSED(a5);
 
     const char *path = (const char *)path_ptr;
-    if (!path) return (u32)-1;
+    if (!path) return (uptr)-1;
 
     int fd = vfs_open(path, flags);
-    return (fd < 0) ? (u32)-1 : (u32)fd;
+    return (fd < 0) ? (uptr)-1 : (uptr)fd;
 }
 
 /*
@@ -109,10 +109,10 @@ u32 sys_open(u32 path_ptr, u32 flags, u32 a3, u32 a4, u32 a5) {
  * Descrição: Fecha o descritor de arquivo especificado.
  *            Retorna 0 em sucesso ou -1 em erro.
  */
-u32 sys_close(u32 fd, u32 a2, u32 a3, u32 a4, u32 a5) {
+uptr sys_close(uptr fd, uptr a2, uptr a3, uptr a4, uptr a5) {
     UNUSED(a2); UNUSED(a3); UNUSED(a4); UNUSED(a5);
 
-    if (fd <= 2) return (u32)-1; /* Não fecha stdin/stdout/stderr */
+    if (fd <= 2) return (uptr)-1; /* Não fecha stdin/stdout/stderr */
     vfs_close((int)fd);
     return 0;
 }
@@ -121,22 +121,22 @@ u32 sys_close(u32 fd, u32 a2, u32 a3, u32 a4, u32 a5) {
  * Função: sys_exec
  * Descrição: Carrega e executa um programa a partir do caminho especificado.
  */
-u32 sys_exec(u32 path_ptr, u32 argv_ptr, u32 envp_ptr, u32 a4, u32 a5) {
+uptr sys_exec(uptr path_ptr, uptr argv_ptr, uptr envp_ptr, uptr a4, uptr a5) {
     UNUSED(argv_ptr); UNUSED(envp_ptr); UNUSED(a4); UNUSED(a5);
 
     const char *path = (const char *)path_ptr;
-    if (!path) return (u32)-1;
+    if (!path) return (uptr)-1;
 
     extern int exec_program(const char *path);
     int result = exec_program(path);
-    return (result < 0) ? (u32)-1 : (u32)result;
+    return (result < 0) ? (uptr)-1 : (uptr)result;
 }
 
 /*
  * Função: sys_getpid
  * Descrição: Retorna o PID do processo atual.
  */
-u32 sys_getpid(u32 a1, u32 a2, u32 a3, u32 a4, u32 a5) {
+uptr sys_getpid(uptr a1, uptr a2, uptr a3, uptr a4, uptr a5) {
     UNUSED(a1); UNUSED(a2); UNUSED(a3); UNUSED(a4); UNUSED(a5);
 
     process_t *proc = get_current_process();
@@ -147,7 +147,7 @@ u32 sys_getpid(u32 a1, u32 a2, u32 a3, u32 a4, u32 a5) {
  * Função: sys_sleep
  * Descrição: Coloca o processo atual para dormir pelo número de ms.
  */
-static u32 sys_sleep_impl(u32 ms, u32 a2, u32 a3, u32 a4, u32 a5) {
+static uptr sys_sleep_impl(uptr ms, uptr a2, uptr a3, uptr a4, uptr a5) {
     UNUSED(a2); UNUSED(a3); UNUSED(a4); UNUSED(a5);
     thread_sleep(ms);
     return 0;
@@ -157,16 +157,16 @@ static u32 sys_sleep_impl(u32 ms, u32 a2, u32 a3, u32 a4, u32 a5) {
  * Função: sys_malloc_impl
  * Descrição: Aloca memória para o processo em user mode.
  */
-static u32 sys_malloc_impl(u32 size, u32 a2, u32 a3, u32 a4, u32 a5) {
+static uptr sys_malloc_impl(uptr size, uptr a2, uptr a3, uptr a4, uptr a5) {
     UNUSED(a2); UNUSED(a3); UNUSED(a4); UNUSED(a5);
-    return (u32)kmalloc(size);
+    return (uptr)kmalloc(size);
 }
 
 /*
  * Função: sys_free_impl
  * Descrição: Libera memória alocada pelo processo em user mode.
  */
-static u32 sys_free_impl(u32 ptr, u32 a2, u32 a3, u32 a4, u32 a5) {
+static uptr sys_free_impl(uptr ptr, uptr a2, uptr a3, uptr a4, uptr a5) {
     UNUSED(a2); UNUSED(a3); UNUSED(a4); UNUSED(a5);
     kfree((void *)ptr);
     return 0;
@@ -221,7 +221,7 @@ void syscall_handler(syscall_regs_t *regs) {
 
     if (num >= SYSCALL_COUNT || syscall_table[num] == NULL) {
         /* Syscall inválida */
-        regs->ret = (u32)-1;
+        regs->ret = (uptr)-1;
         return;
     }
 

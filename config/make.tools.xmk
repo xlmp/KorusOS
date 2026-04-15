@@ -8,7 +8,7 @@ DEBUG_POIN= -gdwarf-4
 COMPILE = LLVM
 ENVIRONMENT = WINDOWS
 language = pt_br
-arch = x32
+arch = x64
 
 #
 INCLUDEDIR = core/_include
@@ -30,10 +30,13 @@ LINKER-SERVICES-FILE-LD = .config/core.service.ld
 CC = clang 
 CCNAME = Usando Compilador LLVM
 
+# LD = clang
+# LDPARAMS = -m64
+
 #compiland codigo .cpp
-CCPARAMS = $(DEBUG_POIN) -m32 -I$(INCLUDEDIR) -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -Wno-write-strings $
+CCPARAMS = $(DEBUG_POIN) -m64 -I$(INCLUDEDIR) -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -Wno-write-strings $
 	-fpermissive $
-	-march=i386 --target=i386-pc-none-elf -ffreestanding $
+	-march=x86-64 --target=x86_64-pc-none-elf -ffreestanding $
 	-fasm-blocks -std=c++14 $
 	-Wc++11-narrowing $
 	-Werror=return-type $
@@ -64,9 +67,11 @@ ASPARAMS = -m32 -I$(INCLUDEDIR)  -march=i386 --target=i386-pc-none-elf -ffreesta
 
 
 AR= llvm-ar
+LDx32= ld.lld
 LD= ld.lld
 # i686-elf-ld 
-LDPARAMS = -nostdlib -melf_i386
+LDPARAMSx32 = -nostdlib -melf_i386
+LDPARAMS = -nostdlib -melf_x86_64
 LINKER_FILE_LD = core/link.ld
 
 #ifeq ($(ENVIRONMENT),WINDOWS)

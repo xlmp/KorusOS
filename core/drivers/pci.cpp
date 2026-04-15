@@ -22,7 +22,7 @@
 extern void screen_print(const char *str);
 extern void screen_println(const char *str);
 extern void screen_print_int(s32 val);
-extern void screen_print_hex(u32 val);
+extern void screen_print_hex(uptr val);
 extern int register_device(device_type_t type, const char *name,
                            const char *info, u32 base_addr, u32 irq);
 

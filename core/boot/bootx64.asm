@@ -5,7 +5,7 @@ MULTIBOOT2_CHECKSUM equ -(MULTIBOOT2_MAGIC + MULTIBOOT2_ARCH + MULTIBOOT2_LENGTH
 
 STACK_SIZE equ 0x8000               ; 32 KB de pilha
 
-section .multiboot2
+section .multiboot
 align 8
 header_start:
     dd MULTIBOOT2_MAGIC

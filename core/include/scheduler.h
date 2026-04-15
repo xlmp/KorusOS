@@ -30,10 +30,10 @@ typedef enum {
  * CONTEXTO DE CPU (registradores salvos)
  * ============================================================ */
 typedef struct {
-    u32 edi, esi, ebp, esp;
-    u32 ebx, edx, ecx, eax;
-    u32 eip;
-    u32 eflags;
+    u64 rdi, rsi, rbp, rsp;
+    u64 rbx, rdx, rcx, rax;
+    u64 rip;
+    u64 rflags;
 } PACKED cpu_context_t;
 
 /* ============================================================

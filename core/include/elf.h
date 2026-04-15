@@ -77,7 +77,7 @@ typedef struct {
  * ESTRUTURA DE CONTEXTO DO ELF CARREGADO
  * ============================================================ */
 typedef struct {
-    u32 entry_point;    /* Endereço de início da execução */
+    uptr entry_point;    /* Endereço de início da execução */
     u32 load_base;      /* Endereço base de carregamento */
     u32 load_end;       /* Endereço final do segmento carregado */
     bool valid;         /* ELF foi validado e carregado com sucesso */

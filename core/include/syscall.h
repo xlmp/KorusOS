@@ -37,18 +37,18 @@
  * REGISTROS DE CONTEXTO DA SYSCALL
  * ============================================================ */
 typedef struct {
-    u32 syscall_num;    /* Número da syscall (em eax) */
-    u32 arg1;           /* Primeiro argumento (ebx) */
-    u32 arg2;           /* Segundo argumento (ecx) */
-    u32 arg3;           /* Terceiro argumento (edx) */
-    u32 arg4;           /* Quarto argumento (esi) */
-    u32 arg5;           /* Quinto argumento (edi) */
-    u32 ret;            /* Valor de retorno (eax) */
+    uptr syscall_num;    /* Número da syscall (em rax) */
+    uptr arg1;           /* Primeiro argumento (rdi) */
+    uptr arg2;           /* Segundo argumento (rsi) */
+    uptr arg3;           /* Terceiro argumento (rdx) */
+    uptr arg4;           /* Quarto argumento (r10) */
+    uptr arg5;           /* Quinto argumento (r8) */
+    uptr ret;            /* Valor de retorno (rax) */
 } syscall_regs_t;
 
 /* Tipo de ponteiro para handler de syscall */
-typedef u32 (*syscall_handler_t)(u32 arg1, u32 arg2, u32 arg3,
-                                  u32 arg4, u32 arg5);
+typedef uptr (*syscall_handler_t)(uptr arg1, uptr arg2, uptr arg3,
+                                  uptr arg4, uptr arg5);
 
 /* ============================================================
  * PROTÓTIPOS

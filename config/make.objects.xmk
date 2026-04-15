@@ -1,4 +1,4 @@
-core-objets = .obj/core/boot/boot.o $
+core-objets = .obj/core/boot/bootx64.o $
         .obj/core/drivers/keyboard.o $
         .obj/core/drivers/pci.o $
         .obj/core/drivers/screen.o $
@@ -13,4 +13,3 @@ core-objets = .obj/core/boot/boot.o $
         .obj/core/shell/shell.o $
         .obj/core/kernel/scheduler.o $
         .obj/core/fs/vfs.o
-                

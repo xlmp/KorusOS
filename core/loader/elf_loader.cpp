@@ -12,7 +12,7 @@
 
 extern void screen_print(const char *str);
 extern void screen_println(const char *str);
-extern void screen_print_hex(u32 val);
+extern void screen_print_hex(uptr val);
 extern void screen_print_int(s32 val);
 
 /* ============================================================

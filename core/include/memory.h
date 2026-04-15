@@ -34,19 +34,21 @@
  * ESTRUTURAS DE PAGINAÇÃO
  * ============================================================ */
 
-/* Entrada de tabela de páginas */
+/* Entrada de tabela de páginas (64-bit para x86_64) */
 typedef struct {
-    u32 present    : 1;
-    u32 writable   : 1;
-    u32 user       : 1;
-    u32 writethrough: 1;
-    u32 nocache    : 1;
-    u32 accessed   : 1;
-    u32 dirty      : 1;
-    u32 reserved   : 1;
-    u32 global     : 1;
-    u32 avail      : 3;
-    u32 frame      : 20;  /* Endereço físico do frame (20 bits superiores) */
+    u64 present    : 1;
+    u64 writable   : 1;
+    u64 user       : 1;
+    u64 writethrough: 1;
+    u64 nocache    : 1;
+    u64 accessed   : 1;
+    u64 dirty      : 1;
+    u64 pat        : 1;
+    u64 global     : 1;
+    u64 avail      : 3;
+    u64 frame      : 40;  /* Endereço físico do frame (40 bits) */
+    u64 avail2     : 11;
+    u64 nx         : 1;   /* No execute */
 } PACKED page_entry_t;
 
 /* Tabela de páginas (1024 entradas) */

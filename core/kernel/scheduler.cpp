@@ -14,7 +14,7 @@
 extern void screen_print(const char *str);
 extern void screen_println(const char *str);
 extern void screen_print_int(s32 val);
-extern void screen_print_hex(u32 val);
+extern void screen_print_hex(uptr val);
 
 /* ============================================================
  * VARIÁVEIS INTERNAS DO SCHEDULER
@@ -154,15 +154,15 @@ int create_thread(const char *name, void (*entry)(void), u32 priority) {
     kstrncpy(t->name, name ? name : "thread", 32);
 
     /* Configura o contexto inicial da thread */
-    u32 stack_top = (u32)(t->stack + THREAD_STACK_SIZE);
+    uptr stack_top = (uptr)(t->stack + THREAD_STACK_SIZE);
 
     /* Empilha o endereço de retorno (terminate_thread) */
-    stack_top -= 4;
-    *((u32 *)stack_top) = (u32)entry;
+    stack_top -= 8;
+    *((uptr *)stack_top) = (uptr)entry;
 
-    t->context.esp    = stack_top;
-    t->context.eip    = (u32)entry;
-    t->context.eflags = 0x00000202; /* IF habilitado */
+    t->context.rsp    = stack_top;
+    t->context.rip    = (uptr)entry;
+    t->context.rflags = 0x00000202; /* IF habilitado */
 
     thread_count++;
     return (int)t->id;

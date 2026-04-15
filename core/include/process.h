@@ -41,13 +41,13 @@ typedef struct process {
     char            name[PROC_NAME_LEN];        /* Nome do processo */
     process_state_t state;                      /* Estado atual */
     privilege_t     privilege;                  /* Nível de privilégio */
-    u32             page_directory;             /* Diretório de páginas próprio */
+    uptr            page_directory;             /* Diretório de páginas próprio */
     u32             thread_ids[MAX_THREADS_PER_PROC]; /* IDs das threads */
     u32             thread_count;               /* Número de threads */
     u32             parent_pid;                 /* PID do processo pai */
     s32             exit_code;                  /* Código de saída */
-    u32             user_stack;                 /* Endereço da pilha user */
-    u32             heap_base;                  /* Base da heap */
+    uptr            user_stack;                 /* Endereço da pilha user */
+    uptr            heap_base;                  /* Base da heap */
     u32             heap_size;                  /* Tamanho atual da heap */
     u32             entry_point;                /* Endereço de entrada */
     struct process *next;                       /* Próximo processo na lista */

@@ -5,7 +5,7 @@
  *            inicia o shell interativo para o usuário.
  *
  * Compilador: Clang (LLVM)
- * Arquitetura: x86 (32 bits)
+ * Arquitetura: x86_64 (64 bits)
  */
 
 #include "../include/kernel.h"
@@ -22,7 +22,7 @@ extern void init_screen(void);
 extern void screen_clear(void);
 extern void screen_print(const char *str);
 extern void screen_println(const char *str);
-extern void screen_print_hex(u32 val);
+extern void screen_print_hex(uptr val);
 extern void screen_print_int(s32 val);
 extern void screen_set_color(u8 fg, u8 bg);
 extern void init_keyboard(void);
@@ -36,7 +36,7 @@ extern void shell_run(void);
  * ============================================================ */
 #define OS_NAME         "Korus OS"
 #define OS_VERSION      "0.1.0"
-#define OS_ARCH         "x86"
+#define OS_ARCH         "x86_64"
 #define MULTIBOOT_EXPECTED_MAGIC 0x2BADB002
 
 /* ============================================================
