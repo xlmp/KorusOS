@@ -50,10 +50,9 @@ extern void shell_run(void);
  */
 static void print_banner(void) {
     screen_set_color(0x0A, 0x00); /* Verde claro no fundo preto */
-    screen_println("╔══════════════════════════════════════════════════╗");
-    screen_println("║          Korus OS - Experimental OS v0.1.0           ║");
-    screen_println("║     Kernel x86 experimental baseado em C         ║");
-    screen_println("╚══════════════════════════════════════════════════╝");
+    screen_println("╔--------------------------------------------------------------------------╗");
+    screen_println("|                          Korus OS - Experimental OS v0.1.0                  |");
+    screen_println("╚--------------------------------------------------------------------------╝");
     screen_set_color(0x07, 0x00); /* Cinza claro padrão */
     screen_println("");
 }
@@ -97,6 +96,14 @@ static void print_fail_step(const char *msg) {
  *   magic - Número mágico fornecido pelo GRUB (deve ser 0x2BADB002)
  *   mbi   - Ponteiro para estrutura com informações de boot do Multiboot
  */
+int create_thread(const char *name, void (*entry)(void), u32 priority);
+void ThreadTeste(){
+    while(1){
+        // screen_println("Thread de teste rodando...");
+    //     for (volatile u32 i = 0; i < 100000000; i++); /* Delay simples */
+    }
+}
+extern "C"
 void kernel_main(u32 magic, multiboot_info_t *mbi) {
 
     /* Inicializa o driver de vídeo (deve ser o primeiro) */
@@ -170,6 +177,8 @@ void kernel_main(u32 magic, multiboot_info_t *mbi) {
     screen_println("Sistema inicializado com sucesso! Digite 'help' para ajuda.");
     screen_set_color(0x07, 0x00);
     screen_println("");
+
+    // create_thread("ThreadTeste", (void (*)(void))ThreadTeste, PRIVILEGE_USER);
 
     /* Inicia o shell interativo */
     shell_run();

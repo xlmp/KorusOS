@@ -184,7 +184,7 @@ static u32 sys_free_impl(u32 ptr, u32 a2, u32 a3, u32 a4, u32 a5) {
 void init_syscalls(void) {
     /* Zera a tabela */
     for (int i = 0; i < SYSCALL_COUNT; i++) {
-        syscall_table[i] = NULL;
+        syscall_table[i] = *(syscall_handler_t*)NULL;
     }
 
     /* Registra syscalls na tabela */

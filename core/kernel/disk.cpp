@@ -256,7 +256,7 @@ int disk_write(u8 drive_num, u32 lba, u8 sector_count, const void *buffer) {
  * Descrição: Retorna ponteiro para as informações do drive especificado.
  */
 drive_info_t *get_drive_info(u8 drive) {
-    if (drive >= MAX_DRIVES) return NULL;
+    if (drive >= MAX_DRIVES) return (drive_info_t *)NULL;
     return &drives[drive];
 }
 

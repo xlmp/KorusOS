@@ -350,7 +350,7 @@ static const shell_command_t commands[] = {
     { "echo",    cmd_echo,    "Exibe texto" },
     { "clear",   cmd_clear,   "Limpa a tela" },
     { "version", cmd_version, "Versao do sistema" },
-    { NULL,      NULL,        NULL },
+    { (const char *)NULL,      (void (*)(int, char **))NULL,        (const char *)NULL },
 };
 
 /* ============================================================

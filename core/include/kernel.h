@@ -127,6 +127,7 @@ typedef struct {
 /* ============================================================
  * PROTÓTIPOS DO KERNEL PRINCIPAL
  * ============================================================ */
+extern "C"
 void kernel_main(u32 magic, multiboot_info_t *mbi);
 void kernel_panic(const char *msg);
 void kernel_log(const char *msg);

@@ -153,7 +153,7 @@ static u8 pci_config_read8(u8 bus, u8 dev, u8 func, u8 offset) {
  */
 static const char *pci_get_class_name(u8 class_code, u8 subclass) {
     const char *generic = "Dispositivo Desconhecido";
-    const char *class_match = NULL;
+    const char *class_match = (const char *)NULL;
 
     for (u32 i = 0; pci_class_table[i].class_code != 0xFF; i++) {
         const pci_class_entry_t *e = &pci_class_table[i];

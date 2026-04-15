@@ -21,7 +21,7 @@ extern void screen_print_hex(u32 val);
 static process_t  proc_table[MAX_PROCESSES];
 static u32        next_pid      = 1;
 static u32        proc_count    = 0;
-static process_t *current_proc  = NULL;
+static process_t *current_proc  = (process_t *)NULL;
 
 /* ============================================================
  * FUNÇÕES AUXILIARES
@@ -65,7 +65,7 @@ void init_processes(void) {
     kmemset(proc_table, 0, sizeof(proc_table));
     next_pid     = 1;
     proc_count   = 0;
-    current_proc = NULL;
+    current_proc = (process_t *)NULL;
 
     /* Cria o processo kernel (PID 0) */
     proc_table[0].pid       = 0;
@@ -171,7 +171,7 @@ process_t *get_process_by_pid(u32 pid) {
             return &proc_table[i];
         }
     }
-    return NULL;
+    return (process_t *)NULL;
 }
 
 /*

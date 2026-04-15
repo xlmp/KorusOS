@@ -43,9 +43,9 @@ typedef struct heap_block {
 } heap_block_t;
 
 #define HEAP_MAGIC      0xCAFEBABE
-static u8  *heap_base_ptr = NULL;
+static u8  *heap_base_ptr = (u8 *)NULL;
 static u32  heap_current  = 0;
-static heap_block_t *heap_head = NULL;
+static heap_block_t *heap_head = (heap_block_t *)NULL;
 
 /* ============================================================
  * FUNÇÕES DO BITMAP DE FRAMES
@@ -131,7 +131,7 @@ void init_memory(u32 mem_upper_kb) {
     heap_head->magic = HEAP_MAGIC;
     heap_head->size  = HEAP_MAX_SIZE - sizeof(heap_block_t);
     heap_head->free  = TRUE;
-    heap_head->next  = NULL;
+    heap_head->next  = (heap_block_t *)NULL;
 
     /* Configura o diretório de páginas do kernel (identity mapping simples) */
     kmemset(&kernel_page_dir, 0, sizeof(kernel_page_dir));
@@ -343,6 +343,7 @@ void *kmemcpy(void *dest, const void *src, size_t size) {
     return dest;
 }
 
+extern "C"
 void memcpy(void *dest, const void *src, size_t size) {
     kmemcpy(dest, src, size);
 }

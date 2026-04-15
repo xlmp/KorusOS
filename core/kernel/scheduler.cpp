@@ -23,7 +23,7 @@ extern void screen_print_hex(u32 val);
 /* Tabela de threads do sistema */
 static thread_t  thread_table[MAX_THREADS];
 static u32       next_thread_id = 1;        /* Contador de IDs de threads */
-static thread_t *current_thread = NULL;     /* Thread em execução atual */
+static thread_t *current_thread = (thread_t *)NULL;     /* Thread em execução atual */
 static u32       thread_count   = 0;        /* Total de threads ativas */
 static u32       timer_ticks    = 0;        /* Contador de ticks do timer */
 
@@ -72,7 +72,7 @@ static thread_t *find_next_thread(void) {
                 return &thread_table[i];
             }
         }
-        return NULL;
+        return (thread_t *)NULL;
     }
 
     /* Round-robin: começa após a thread atual */
@@ -93,7 +93,7 @@ static thread_t *find_next_thread(void) {
         return current_thread;
     }
 
-    return NULL;
+    return (thread_t *)NULL;
 }
 
 /* ============================================================
@@ -108,7 +108,7 @@ static thread_t *find_next_thread(void) {
 void init_scheduler(void) {
     /* Zera a tabela de threads */
     kmemset(thread_table, 0, sizeof(thread_table));
-    current_thread = NULL;
+    current_thread = (thread_t *)NULL;
     thread_count   = 0;
     next_thread_id = 1;
     timer_ticks    = 0;
@@ -261,7 +261,7 @@ void terminate_thread(u32 thread_id) {
             /* Libera a pilha */
             if (t->stack) {
                 kfree(t->stack);
-                t->stack = NULL;
+                t->stack = (u8*)NULL;
             }
 
             t->state = THREAD_EMPTY;

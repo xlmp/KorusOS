@@ -126,7 +126,7 @@ static vfs_dirent_t *memfs_readdir(vfs_node_t *node, u32 index) {
             found++;
         }
     }
-    return NULL;
+    return (vfs_dirent_t *)NULL;
 }
 
 /*
@@ -169,13 +169,13 @@ static vfs_node_t *memfs_finddir(vfs_node_t *node, const char *name) {
             return &found_node;
         }
     }
-    return NULL;
+    return (vfs_node_t*)NULL;
 }
 
 /* Operações do root do memfs */
 static vfs_ops_t root_ops = {
-    .read    = NULL,
-    .write   = NULL,
+    .read    = (u32 (*)(struct vfs_node *, u32, u32, u8 *))NULL,
+    .write   = (u32 (*)(struct vfs_node *, u32, u32, u8 *))NULL,
     .open    = memfs_open,
     .close   = memfs_close,
     .readdir = memfs_readdir,
@@ -297,7 +297,7 @@ int vfs_mount(const char *path, vfs_node_t *root, const char *fs_type) {
  *            Retorna NULL se não encontrado.
  */
 vfs_node_t *vfs_resolve_path(const char *path) {
-    if (!path || path[0] != '/') return NULL;
+    if (!path || path[0] != '/') return (vfs_node_t *)NULL;
 
     /* Para a raiz "/" */
     if (path[1] == '\0') return &vfs_root;
@@ -311,7 +311,7 @@ vfs_node_t *vfs_resolve_path(const char *path) {
         return vfs_root.ops->finddir(&vfs_root, filename);
     }
 
-    return NULL;
+    return (vfs_node_t*)NULL;
 }
 
 /*
@@ -405,7 +405,7 @@ void vfs_close(int fd) {
     }
 
     f->in_use = FALSE;
-    f->node   = NULL;
+    f->node   = (vfs_node_t *)NULL;
     f->offset = 0;
 }
 
